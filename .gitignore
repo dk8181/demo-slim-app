@@ -23,3 +23,5 @@ migrations-db.php
 node_modules
 
 *.code-workspace
+
+.editconfig
