@@ -1,0 +1,13 @@
+---
+-   name: Provision Site
+    hosts: all
+    remote_user: root
+    tasks:
+        - import_tasks: tasks/setup_docker.yml
+
+    handlers:
+        -   name: Start docker on boot
+            systemd:
+                name: docker
+                state: started
+                enabled: yes
