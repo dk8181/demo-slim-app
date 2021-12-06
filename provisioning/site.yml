@@ -2,8 +2,15 @@
 -   name: Provision Site
     hosts: all
     remote_user: root
+    vars:
+        certbot_email: mail@mdv.org
+        cerbot_hosts:
+            - demo-auction.mdv.org
+            - api.demo-auction.mdv.org
     tasks:
         - import_tasks: tasks/setup_docker.yml
+        - import_tasks: tasks/setup_cerbot.yml
+        - import_tasks: tasks/generate_certificates.yml
 
     handlers:
         -   name: Start docker on boot
