@@ -1,0 +1,8 @@
+---
+-   name: Create deploying user
+    user:
+        name: deploy
+        password: 'U2hb51Pxntb8a03'
+        groups:
+            - docker
+        state: present
