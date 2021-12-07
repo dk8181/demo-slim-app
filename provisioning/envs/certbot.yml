@@ -1,0 +1,4 @@
+certbot_email: mail@mdv.org
+cerbot_hosts:
+    - demo-auction.mdv.org
+    - api.demo-auction.mdv.org

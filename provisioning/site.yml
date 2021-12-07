@@ -2,11 +2,8 @@
 -   name: Provision Site
     hosts: all
     remote_user: root
-    vars:
-        certbot_email: mail@mdv.org
-        cerbot_hosts:
-            - demo-auction.mdv.org
-            - api.demo-auction.mdv.org
+    vars_files:
+        - envs/certbot.yml
     tasks:
         - import_tasks: tasks/setup_docker.yml
         - import_tasks: tasks/setup_cerbot.yml
