@@ -2,7 +2,7 @@
 -   name: Create deploying user
     user:
         name: deploy
-        password: 'U2hb51Pxntb8a03'
+        password: '!'
         groups:
             - docker
         state: present
