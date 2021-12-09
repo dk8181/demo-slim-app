@@ -1,4 +1,4 @@
-init: docker-down-clear docker-pull docker-build docker-up
+init: docker-down-clear docker-pull docker-build docker-up api-init
 up: docker-up
 down: docker-down
 restart: docker-down docker-up
@@ -17,6 +17,14 @@ docker-pull:
 
 docker-build:
 	docker-compose build
+
+api-init: api-composer-install
+
+api-composer-install:
+	docker-compose run --rm api-php-cli composer install
+
+api-composer-update:
+	docker-compose run --rm api-php-cli composer update
 
 build: build-gateway build-frontend build-api
 
