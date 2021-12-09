@@ -1,4 +1,4 @@
-FROM php:8-fpm-alpine
+FROM php:8-cli-alpine
 
 RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 
