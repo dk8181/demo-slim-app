@@ -3,5 +3,7 @@
 declare(strict_types = 1);
 
 return [
-    'config' => (bool) getenv('APP_DEBUG'),
+    'config' => [
+        'debug' => (bool) getenv('APP_DEBUG'),
+    ],
 ];
