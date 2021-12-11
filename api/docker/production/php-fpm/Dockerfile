@@ -1,6 +1,6 @@
 FROM php:8-cli-alpine AS builder
 
-RUN apk add unzip
+RUN apk add --no-cache unzip
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
