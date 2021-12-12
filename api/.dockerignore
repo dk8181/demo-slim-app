@@ -4,4 +4,6 @@ workspace_auction.code-workspace
 
 /var/.phplint.json
 
+/var/.phpcs.json
+
 /.vscode
