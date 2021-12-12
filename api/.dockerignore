@@ -1,3 +1,5 @@
 workspace_auction.code-workspace
 
 /vendor
+
+/var/*
