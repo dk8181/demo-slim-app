@@ -6,4 +6,6 @@ workspace_auction.code-workspace
 
 /var/.phpcs.json
 
+/var/.phpunit.result.cache
+
 /.vscode
