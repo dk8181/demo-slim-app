@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 $files = array_merge(
     glob(__DIR__ . '/common/*.php') ?: [],
