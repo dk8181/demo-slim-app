@@ -12,9 +12,10 @@
         "php-di/php-di": "^6.3",
         "slim/slim": "^4.9",
         "slim/psr7": "^1.5",
-        "symfony/console": "^6.0"
+        "symfony/console": "^5.4"
     },
     "require-dev": {
+        "overtrue/phplint": "^4.0",
         "roave/security-advisories": "dev-master"
     },
     "autoload": {
@@ -23,7 +24,7 @@
         }
     },
     "scripts": {
-        "lint": "find bin config public src -name \"*.php\" -print0 | xargs -0 -n1 php -l",
+        "lint": "phplint",
         "app": "php bin/app.php --ansi"
     }
 }
