@@ -11,6 +11,9 @@
         <testsuite name="unit">
             <directory suffix=".php">tests/Unit</directory>
         </testsuite>
+        <testsuite name="functional">
+            <directory suffix=".php">tests/Functional</directory>
+        </testsuite>
     </testsuites>
 
     <coverage cacheDirectory="/var/phpunit/coverage"
