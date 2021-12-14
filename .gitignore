@@ -6,7 +6,7 @@ projectInfo
 
 .phpunit.result.cache
 
-phpunit.xml
+# phpunit.xml
 
 .directory
 

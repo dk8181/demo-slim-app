@@ -1,1 +1,7 @@
 /vendor/
+
+/var
+
+.phpunit.result.cache
+
+phpunit.xml.old
