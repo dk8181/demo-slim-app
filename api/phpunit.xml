@@ -24,6 +24,10 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+        <directory suffix=".php">tests</directory>
+            <file>Functional/WebTestCase.php</file>
+        </exclude>
     </coverage>
 
     <php>
