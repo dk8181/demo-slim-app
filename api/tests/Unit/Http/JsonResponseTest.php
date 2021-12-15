@@ -7,6 +7,11 @@ namespace Test\Unit\Http;
 use App\Http\JsonResponse;
 use PHPUnit\Framework\TestCase;
 
+ini_set('xdebug.mode', 'coverage');
+
+/**
+ * @covers \App\Http\JsonResponse
+ */
 class JsonResponseTest extends TestCase
 {
     public function testWithCode(): void
