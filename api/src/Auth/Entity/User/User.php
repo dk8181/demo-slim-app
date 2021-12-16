@@ -10,8 +10,9 @@ class User
     private \DateTimeImmutable $date;
     private Email $email;
     private ?string $passwordHash = null;
-    private ?Token $joinConfirmToken = null;
     private Status $status;
+    private ?Token $joinConfirmToken = null;
+    private \ArrayObject $networks;
 
     private function __construct(
         Id $id,
@@ -23,6 +24,7 @@ class User
         $this->date = $date;
         $this->email = $email;
         $this->status = $status;
+        $this->networks = new \ArrayObject();
     }
 
     public static function requestJoinByEmail(
@@ -35,6 +37,18 @@ class User
         $user = new self($id, $date, $email, Status::wait());
         $user->passwordHash = $passwordHash;
         $user->joinConfirmToken = $token;
+
+        return $user;
+    }
+
+    public static function joinByNetwork(
+        Id $id,
+        \DateTimeImmutable $date,
+        Email $email,
+        NetworkIdentity $identity
+    ): self {
+        $user = new self($id, $date, $email, Status::active());
+        $user->networks->append($identity);
 
         return $user;
     }
@@ -83,5 +97,15 @@ class User
     public function isActive(): bool
     {
         return $this->status->isActive();
+    }
+
+    /**
+     *
+     * @return NetworkIdentity[]
+     */
+    public function getNetworks(): array
+    {
+        /** @var NetworkIdentity[] */
+        return $this->networks->getArrayCopy();
     }
 }
