@@ -36,6 +36,6 @@ class PasswordHasherTest extends TestCase
 
     private function getHasher(): PasswordHasher
     {
-        return new PasswordHasher();
+        return new PasswordHasher(16);
     }
 }
