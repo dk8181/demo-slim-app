@@ -6,7 +6,6 @@ use App\Auth\Entity\User\Email;
 use Ramsey\Uuid\Uuid;
 use DateTimeImmutable;
 use App\Auth\Entity\User\Id;
-use InvalidArgumentException;
 use App\Auth\Entity\User\User;
 use App\Auth\Entity\User\Token;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +17,7 @@ class RequestTest extends TestCase
 {
     public function testSuccess(): void
     {
-        $user = new User(
+        $user = User::requestJoinByEmail(
             $id =  Id::generate(),
             $date = new DateTimeImmutable(),
             $email = new Email('john_dough@info.org'),
