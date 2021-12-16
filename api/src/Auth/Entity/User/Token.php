@@ -19,6 +19,17 @@ class Token
         $this->expires = $expires;
     }
 
+    public function validate(string $givenValue, \DateTimeImmutable $givenDate): void
+    {
+        if (! $this->isEqualTo($givenValue)) {
+            throw new \DomainException('Token is not valid');
+        }
+
+        if (! $this->isExpiredTo($givenDate)) {
+            throw new \DomainException('Token was expired.');
+        }
+    }
+
     public function getValue(): string
     {
         return $this->value;
@@ -27,5 +38,15 @@ class Token
     public function getExpires(): DateTimeImmutable
     {
         return $this->expires;
+    }
+
+    private function isEqualTo(string $givenValue): bool
+    {
+        return $this->value === $givenValue;
+    }
+
+    private function isExpiredTo(\DateTimeImmutable $givenDate): bool
+    {
+        return $this->expires >= $givenDate;
     }
 }

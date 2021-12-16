@@ -62,4 +62,15 @@ class User
     {
         return $this->status->isActive();
     }
+
+    public function confirmJoin(string $token, \DateTimeImmutable $date): void
+    {
+        if (null === $this->joinConfirmToken) {
+            throw new \DomainException('Confirmation not possable');
+        }
+
+        $this->joinConfirmToken->validate($token, $date);
+        $this->status = Status::active();
+        $this->joinConfirmToken = null;
+    }
 }

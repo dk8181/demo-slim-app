@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Auth\Test\Unit\Entity\User;
+namespace App\Auth\Test\Unit\Entity\User\Token;
 
 use Ramsey\Uuid\Uuid;
 use App\Auth\Entity\User\Token;
@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @covers Token
  */
-class TokenTest extends TestCase
+class CreateTest extends TestCase
 {
     public function testSuccess(): void
     {
