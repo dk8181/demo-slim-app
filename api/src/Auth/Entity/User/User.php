@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\Auth\Entity\User;
 
-use DateTimeImmutable;
-
 class User
 {
     private Id $id;
-    private DateTimeImmutable $date;
+    private \DateTimeImmutable $date;
     private Email $email;
     private string $passwordHash;
     private ?Token $joinConfirmToken;
+    private Status $status;
 
     public function __construct(
         Id $id,
-        DateTimeImmutable $date,
+        \DateTimeImmutable $date,
         Email $email,
         string $passwordHash,
         Token $token
@@ -24,6 +23,7 @@ class User
         $this->id = $id;
         $this->date = $date;
         $this->email = $email;
+        $this->status = Status::wait();
         $this->passwordHash = $passwordHash;
         $this->joinConfirmToken = $token;
     }
@@ -33,7 +33,7 @@ class User
         return $this->id;
     }
 
-    public function getDate(): DateTimeImmutable
+    public function getDate(): \DateTimeImmutable
     {
         return $this->date;
     }
@@ -51,5 +51,15 @@ class User
     public function getJoinConfirmToken(): ?Token
     {
         return $this->joinConfirmToken;
+    }
+
+    public function isWait(): bool
+    {
+        return $this->status->isWait();
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status->isActive();
     }
 }
