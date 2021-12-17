@@ -64,6 +64,18 @@ class User
         $this->joinConfirmToken = null;
     }
 
+    public function attachNetwork(NetworkIdentity $identity): void
+    {
+        /** @var NetworkIdentity $existing */
+        foreach ($this->networks as $existing) {
+            if ($existing->isEqualTo($identity)) {
+                throw new \DomainException('This Network was already attached.');
+            }
+        }
+
+        $this->networks->append($identity);
+    }
+
     public function getId(): Id
     {
         return $this->id;

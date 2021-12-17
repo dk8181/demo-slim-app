@@ -9,7 +9,14 @@ interface UserRepository
     public function hasByEmail(Email $email): bool;
     public function hasByNetwork(NetworkIdentity $identity): bool;
 
+    public function findByJoinConfirmToken(string $token): ?User;
+
     public function add(User $user): void;
 
-    public function findByJoinConfirmToken(string $token): ?User;
+    /**
+     * @param Id $userId
+     * @return User
+     * @throws \DomainException
+     */
+    public function get(Id $userId): User;
 }
