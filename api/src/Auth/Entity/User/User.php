@@ -138,6 +138,20 @@ class User
         $this->newEmailToken = $token;
     }
 
+    public function confirmEmailChanging(
+        string $tokenValue,
+        \DateTimeImmutable $date
+    ): void {
+        if ($this->newEmail === null || $this->newEmailToken === null) {
+            throw new \DomainException('Changing was not requested.');
+        }
+
+        $this->newEmailToken->validate($tokenValue, $date);
+        $this->email = $this->newEmail;
+        $this->newEmail = null;
+        $this->newEmailToken = null;
+    }
+
     public function getId(): Id
     {
         return $this->id;
