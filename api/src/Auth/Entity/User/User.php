@@ -16,6 +16,8 @@ class User
     private ?Token $joinConfirmToken = null;
     private \ArrayObject $networks;
     private ?Token $passwordResetToken = null;
+    private ?Email $newEmail = null;
+    private ?Token $newEmailToken = null;
 
     private function __construct(
         Id $id,
@@ -111,6 +113,31 @@ class User
         $this->passwordHash = $hasher->hash($new);
     }
 
+    public function requestEmailChanging(
+        Token $token,
+        \DateTimeImmutable $date,
+        Email $newEmail
+    ): void {
+        if ($token->isExpiredTo($date)) {
+            throw new \DomainException('Token was expired.');
+        }
+
+        if (! $this->isActive()) {
+            throw new \DomainException('User is not active.');
+        }
+
+        if ($this->email->isEqualTo($newEmail)) {
+            throw new \DomainException('New email equals old email.');
+        }
+
+        if ($this->newEmailToken !== null && ! $this->newEmailToken->isExpiredTo($date)) {
+            throw new \DomainException('Email changing was already requested.');
+        }
+
+        $this->newEmail = $newEmail;
+        $this->newEmailToken = $token;
+    }
+
     public function getId(): Id
     {
         return $this->id;
@@ -159,5 +186,15 @@ class User
     {
         /** @var NetworkIdentity[] */
         return $this->networks->getArrayCopy();
+    }
+
+    public function getNewEmail(): ?Email
+    {
+        return $this->newEmail;
+    }
+
+    public function getNewEmailToken(): ?Token
+    {
+        return $this->newEmailToken;
     }
 }
