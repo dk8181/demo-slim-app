@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Auth\Test\Builder;
 
+use Ramsey\Uuid\Uuid;
 use App\Auth\Entity\User\Id;
+use App\Auth\Entity\User\User;
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Token;
-use App\Auth\Entity\User\User;
-use Ramsey\Uuid\Uuid;
+use App\Auth\Entity\User\NetworkIdentity;
 
 class UserBuilder
 {
@@ -18,6 +19,7 @@ class UserBuilder
     private string $passwordHash;
     private ?Token $joinConfirmToken;
     private bool $active = false;
+    private ?NetworkIdentity $networkIdentity = null;
 
     public function __construct() {
         $this->id = Id::generate();
@@ -29,6 +31,14 @@ class UserBuilder
             Uuid::uuid4()->toString(),
             $this->date->modify('+1 day')
         );
+    }
+
+    public function viaNetwork(NetworkIdentity $identity = null): self
+    {
+        $clone = clone $this;
+        $clone->networkIdentity = $identity ?? new NetworkIdentity('instagram', '100003');
+
+        return $clone;
     }
 
     public function withJoinConfirmToken(Token $token): self
@@ -49,6 +59,15 @@ class UserBuilder
 
     public function build(): User
     {
+        if ($this->networkIdentity) {
+            return User::joinByNetwork(
+                $this->id,
+                $this->date,
+                $this->email,
+                $this->networkIdentity
+            );
+        }
+
         $user = User::requestJoinByEmail(
             $this->id,
             $this->date,
