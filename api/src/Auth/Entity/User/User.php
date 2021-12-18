@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Auth\Entity\User;
 
+use App\Auth\Entity\User\Role;
 use App\Auth\Service\PasswordHasher;
 
 class User
@@ -18,6 +19,7 @@ class User
     private ?Token $passwordResetToken = null;
     private ?Email $newEmail = null;
     private ?Token $newEmailToken = null;
+    private Role $role;
 
     private function __construct(
         Id $id,
@@ -30,6 +32,7 @@ class User
         $this->email = $email;
         $this->status = $status;
         $this->networks = new \ArrayObject();
+        $this->role = Role::user();
     }
 
     public static function requestJoinByEmail(
@@ -97,6 +100,19 @@ class User
         $this->passwordResetToken = $token;
     }
 
+    public function resetPassword(
+        string $tokenName,
+        \DateTimeImmutable $date,
+        string $hash
+    ): void {
+        if ($this->passwordResetToken === null) {
+            throw new \DomainException('Resetting is not requested.');
+        }
+        $this->passwordResetToken->validate($tokenName, $date);
+        $this->passwordResetToken = null;
+        $this->passwordHash = $hash;
+    }
+
     public function changePassword(
         string $current,
         string $new,
@@ -152,6 +168,13 @@ class User
         $this->newEmailToken = null;
     }
 
+    public function changeRole(Role $newRole): void
+    {
+        if (! $this->role->equalTo($newRole)) {
+            $this->role = $newRole;
+        }
+    }
+
     public function getId(): Id
     {
         return $this->id;
@@ -180,6 +203,11 @@ class User
     public function getJoinConfirmToken(): ?Token
     {
         return $this->joinConfirmToken;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
     }
 
     public function isWait(): bool

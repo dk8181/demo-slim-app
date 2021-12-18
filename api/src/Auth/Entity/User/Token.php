@@ -22,7 +22,7 @@ class Token
     public function validate(string $givenValue, \DateTimeImmutable $givenDate): void
     {
         if (! $this->isEqualTo($givenValue)) {
-            throw new \DomainException('Token is not valid');
+            throw new \DomainException('Token is not valid.');
         }
 
         if ($this->isExpiredTo($givenDate)) {

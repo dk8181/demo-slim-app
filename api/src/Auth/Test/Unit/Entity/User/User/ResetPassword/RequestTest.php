@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Auth\Test\Unit\Entity\User\User;
+namespace App\Auth\Test\Unit\Entity\User\User\ResetPassword;
 
 use Ramsey\Uuid\Uuid;
 use App\Auth\Entity\User\Token;

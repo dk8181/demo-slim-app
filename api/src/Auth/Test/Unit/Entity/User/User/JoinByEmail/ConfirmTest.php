@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Auth\Test\Unit\Entity\User\User;
+namespace App\Auth\Test\Unit\Entity\User\User\JoinByEmail;
 
 use App\Auth\Entity\User\Token;
 use App\Auth\Test\Builder\UserBuilder;
@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 /**
- * @covers App\Auth\Entity\User\User
+ * @covers App\Auth\Entity\User\User::confirmJoin
  */
 class ConfirmTest extends TestCase
 {
@@ -40,7 +40,7 @@ class ConfirmTest extends TestCase
             ->withJoinConfirmToken($token = $this->createToken())
             ->build();
 
-        $this->expectExceptionMessage('Token is not valid');
+        $this->expectExceptionMessage('Token is not valid.');
 
         $user->confirmJoin(
             Uuid::uuid4()->toString(),

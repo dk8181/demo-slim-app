@@ -11,6 +11,7 @@ interface UserRepository
 
     public function findByJoinConfirmToken(string $tokenValue): ?User;
     public function findByNewEmailToken(string $tokenValue): ?User;
+    public function findByPasswordResetToken(string $tokenValue): ?User;
 
     public function add(User $user): void;
 

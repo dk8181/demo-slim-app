@@ -45,7 +45,7 @@ class ConfirmTest extends TestCase
 
         $user->requestEmailChanging($token, $now, new Email('new-john@info.org'));
 
-        $this->expectExceptionMessage('Token is not valid');
+        $this->expectExceptionMessage('Token is not valid.');
         $user->confirmEmailChanging('incorrect', $now->modify('+2 hour'));
     }
 

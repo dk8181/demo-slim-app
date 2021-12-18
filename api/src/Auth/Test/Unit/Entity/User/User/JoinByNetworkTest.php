@@ -9,6 +9,7 @@ use App\Auth\Entity\User\User;
 use App\Auth\Entity\User\Email;
 use PHPUnit\Framework\TestCase;
 use App\Auth\Entity\User\NetworkIdentity;
+use App\Auth\Entity\User\Role;
 
 /**
  * @cavers User::joinByNetwork
@@ -30,6 +31,7 @@ class JoinByNetworkTest extends TestCase
 
         self::assertFalse($user->isWait());
         self::assertTrue($user->isActive());
+        self::assertEquals(Role::USER, $user->getRole()->getName());
 
         self::assertCount(1, $networks = $user->getNetworks());
         self::assertEquals($network, $networks[0] ?? null);

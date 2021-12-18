@@ -31,7 +31,7 @@ class ValidateTest extends TestCase
             $expires = new \DateTimeImmutable()
         );
 
-        $this->expectExceptionMessage('Token is not valid');
+        $this->expectExceptionMessage('Token is not valid.');
 
         $token->validate(
             Uuid::uuid4()->toString(),
