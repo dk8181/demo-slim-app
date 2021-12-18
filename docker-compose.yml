@@ -48,3 +48,16 @@ services:
             APP_DEBUG: 1
         volumes:
             - ./api:/app
+
+    api-postgres:
+        image: postgres:14.1-alpine
+        environment:
+            POSTGRES_USER: app
+            POSTGRES_PASSWORD: secret
+            POSTGRES_DB: an_app
+        ports:
+          - '54323:5432'
+        volumes:
+          - api-postgres:/var/lib/postgresql/data
+volumes:
+    api-postgres:
