@@ -175,6 +175,13 @@ class User
         }
     }
 
+    public function remove(): void
+    {
+        if (! $this->isWait()) {
+            throw new \DomainException('Unable to remove an active user.');
+        }
+    }
+
     public function getId(): Id
     {
         return $this->id;

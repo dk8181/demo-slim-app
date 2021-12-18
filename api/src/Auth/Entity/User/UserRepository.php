@@ -14,6 +14,7 @@ interface UserRepository
     public function findByPasswordResetToken(string $tokenValue): ?User;
 
     public function add(User $user): void;
+    public function remove(User $user): void;
 
     /**
      * @param Id $userId
