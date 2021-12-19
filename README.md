@@ -1,1 +1,1 @@
-#Demo Slim ReactJS project
+#Demo Slim + postresql, ReactJS project
