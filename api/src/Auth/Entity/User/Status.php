@@ -4,15 +4,25 @@ declare(strict_types=1);
 
 namespace App\Auth\Entity\User;
 
+use Webmozart\Assert\Assert;
+
 class Status
 {
-    private const WAIT = 'wait';
-    private const ACTIVE = 'active';
+    public const WAIT = 'wait';
+    public const ACTIVE = 'active';
 
     private string $name;
 
-    private function __construct(string $name)
+    public function __construct(string $name)
     {
+        Assert::oneOf(
+            $name,
+            [
+                self::ACTIVE,
+                self::WAIT,
+            ]
+        );
+
         $this->name = $name;
     }
 
@@ -34,5 +44,10 @@ class Status
     public function isWait(): bool
     {
         return self::WAIT === $this->name;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }
