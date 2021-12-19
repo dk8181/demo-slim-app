@@ -8,7 +8,7 @@ use App\Auth\Entity\User\Id;
 use App\Auth\Entity\User\User;
 use App\Auth\Entity\User\Email;
 use PHPUnit\Framework\TestCase;
-use App\Auth\Entity\User\NetworkIdentity;
+use App\Auth\Entity\User\Network;
 use App\Auth\Entity\User\Role;
 
 /**
@@ -22,7 +22,7 @@ class JoinByNetworkTest extends TestCase
             $id = Id::generate(),
             $date =  new \DateTimeImmutable(),
             $email = new Email('john_dough@info.org'),
-            $network = new NetworkIdentity('tweetter', 'tweetter-33')
+            $network = new Network('tweetter', 'tweetter-33')
         );
 
         self::assertEquals($id, $user->getId());
