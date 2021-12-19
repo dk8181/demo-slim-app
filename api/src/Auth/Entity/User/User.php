@@ -6,6 +6,8 @@ namespace App\Auth\Entity\User;
 
 use App\Auth\Entity\User\Role;
 use App\Auth\Service\PasswordHasher;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -56,7 +58,7 @@ class User
      * @ORM\Column(type="auth_user_role", length=16)
      */
     private Role $role;
-    private \ArrayObject $networks;
+    private Collection $networks;
 
     private function __construct(
         Id $id,
@@ -68,7 +70,7 @@ class User
         $this->date = $date;
         $this->email = $email;
         $this->status = $status;
-        $this->networks = new \ArrayObject();
+        $this->networks = new ArrayCollection();
         $this->role = Role::user();
     }
 
@@ -93,7 +95,7 @@ class User
         Network $network
     ): self {
         $user = new self($id, $date, $email, Status::active());
-        $user->networks->append($network);
+        $user->networks->add($network);
 
         return $user;
     }
@@ -118,7 +120,7 @@ class User
             }
         }
 
-        $this->networks->append($network);
+        $this->networks->add($network);
     }
 
     public function requestPasswordReset(Token $token, \DateTimeImmutable $date): void
@@ -271,7 +273,7 @@ class User
     public function getNetworks(): array
     {
         /** @var Network[] */
-        return $this->networks->getArrayCopy();
+        return $this->networks->toArray();
     }
 
     public function getNewEmail(): ?Email
