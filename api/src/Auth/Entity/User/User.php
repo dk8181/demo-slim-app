@@ -6,12 +6,27 @@ namespace App\Auth\Entity\User;
 
 use App\Auth\Entity\User\Role;
 use App\Auth\Service\PasswordHasher;
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="auth_users")
+ */
 class User
 {
+    /**
+     * @ORM\Column(type="auth_user_id")
+     * @ORM\Id
+     */
     private Id $id;
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
     private \DateTimeImmutable $date;
     private Email $email;
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
     private ?string $passwordHash = null;
     private Status $status;
     private ?Token $joinConfirmToken = null;

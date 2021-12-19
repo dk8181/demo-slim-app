@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
+use App\Auth;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Psr\Container\ContainerInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 
 return [
@@ -19,6 +21,7 @@ return [
          *   dev_mode:bool,
          *   proxy_dir:string,
          *   proxy_namespace:string,
+         *   types:array<string,string>,
          *   connection:array
          * } $settings
          */
@@ -45,6 +48,12 @@ return [
         $config->setProxyNamespace($settings['proxy_namespace']);
         $config->setNamingStrategy(new UnderscoreNamingStrategy());
 
+        foreach ($settings['types'] as $name => $class) {
+            if (! Type::hasType($name)) {
+                Type::addType($name, $class);
+            }
+        }
+
         if ($settings['dev_mode']) {
             $config->setAutoGenerateProxyClasses(true);
         }
@@ -64,6 +73,9 @@ return [
             ],
             'proxy_dir' =>  __DIR__ . '/../../var/cache/doctrine/proxy',
             'proxy_namespace' => 'App\Proxies',
+            'types' => [
+                Auth\Entity\User\IdType::NAME => Auth\Entity\User\IdType::class,
+            ],
             'connection' => [
                 'driver' => 'pdo_pgsql',
                 'host' => getenv('DB_HOST'),
