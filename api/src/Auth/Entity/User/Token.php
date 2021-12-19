@@ -52,6 +52,11 @@ class Token
         return $this->expires <= $givenDate;
     }
 
+    public function isEmpty(): bool
+    {
+        return empty($this->value);
+    }
+
     public function getValue(): string
     {
         return $this->value;
