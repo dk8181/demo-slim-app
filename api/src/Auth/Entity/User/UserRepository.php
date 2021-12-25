@@ -12,12 +12,10 @@ class UserRepository
     private EntityManagerInterface $em;
     private EntityRepository $repository;
 
-    public function __construct(EntityManagerInterface $em )
+    public function __construct(EntityManagerInterface $em, EntityRepository $repository)
     {
-        /** @var EntityRepository $repository */
-        $repository = $em->getRepository(User::class);
-        $this->repository = $repository;
         $this->em = $em;
+        $this->repository = $repository;
     }
 
     /**
