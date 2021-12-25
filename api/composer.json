@@ -9,6 +9,7 @@
     "require": {
         "php": "^8.0",
         "ext-json": "^8.0",
+        "doctrine/migrations": "^3.3",
         "doctrine/orm": "^2.10",
         "laminas/laminas-config-aggregator": "^1.7",
         "php-di/php-di": "^6.3",
