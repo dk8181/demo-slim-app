@@ -65,6 +65,15 @@ api-test-functional-coverage:
 api-composer-update:
 	docker-compose run --rm api-php-cli composer update
 
+api-composer-upgrade:
+	docker-compose run --rm api-php-cli composer upgrade
+
+api-migrations:
+	docker-compose run --rm api-php-cli composer app migrations:migrate
+
+api-migrations-diff:
+	docker-compose run --rm api-php-cli composer app migrations:diff
+
 build: build-gateway build-frontend build-api
 
 build-gateway:
