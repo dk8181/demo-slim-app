@@ -20,7 +20,7 @@ class Token
     private string $value;
     /**
      * @var DateTimeImmutable
-     * @ORM\Column(type="datetime_immutable, nullable=true)
+     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private DateTimeImmutable $expires;
 

@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use App\Auth;
+use Doctrine\Common\EventManager;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
@@ -62,6 +64,14 @@ return [
             $config->setAutoGenerateProxyClasses(false);
         }
 
+        $eventManager = new EventManager();
+
+        foreach ($settings['subscribers'] as $name) {
+            /** @var EventSubscriber $subscriber */
+            $subscriber = $container->get($name);
+            $eventManager->addEventSubscriber($subscriber);
+        }
+
         return EntityManager::create($settings['connection'], $config);
     },
 
@@ -87,6 +97,7 @@ return [
                 'dbname' => getenv('DB_NAME'),
                 'charset' => 'UTF-8',
             ],
+            'subscribers' => [],
         ],
     ],
 ];
