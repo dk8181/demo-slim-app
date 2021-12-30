@@ -74,6 +74,9 @@ api-migrations:
 api-migrations-diff:
 	docker-compose run --rm api-php-cli composer app migrations:diff
 
+api-validate-schema:
+	docker-compose run --rm api-php-cli composer app orm:validate-schema
+
 build: build-gateway build-frontend build-api
 
 build-gateway:
