@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Auth\Fixture;
 
+use Ramsey\Uuid\Uuid;
 use App\Auth\Entity\User\Id;
 use App\Auth\Entity\User\User;
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Token;
-use Ramsey\Uuid\Nonstandard\Uuid;
 use App\Auth\Service\PasswordHasher;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -19,7 +19,7 @@ class UserFixture extends AbstractFixture
 
     public function __construct()
     {
-        $hasher = new PasswordHasher();
+        $this->hasher = new PasswordHasher();
     }
 
     public function load(ObjectManager $manager): void
@@ -32,7 +32,7 @@ class UserFixture extends AbstractFixture
             new Token($value = Uuid::uuid4()->toString(), $date->modify('+1 day'))
         );
 
-        $user->confirmJoin($value, $date->modify('+1 day'));
+        $user->confirmJoin($value, $date);
 
         $manager->persist($user);
 
