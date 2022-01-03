@@ -43,6 +43,12 @@ api-wait-db:
 api-migrations:
 	docker-compose run --rm api-php-cli composer app migrations:migrate
 
+api-migrations-diff:
+	docker-compose run --rm api-php-cli composer app migrations:diff
+
+api-validate-schema:
+	docker-compose run --rm api-php-cli composer app orm:validate-schema
+
 api-lint:
 	docker-compose run --rm api-php-cli composer lint
 	docker-compose run --rm api-php-cli composer cs-check
@@ -70,15 +76,6 @@ api-composer-update:
 
 api-composer-upgrade:
 	docker-compose run --rm api-php-cli composer upgrade
-
-api-migrations:
-	docker-compose run --rm api-php-cli composer app migrations:migrate
-
-api-migrations-diff:
-	docker-compose run --rm api-php-cli composer app migrations:diff
-
-api-validate-schema:
-	docker-compose run --rm api-php-cli composer app orm:validate-schema
 
 build: build-gateway build-frontend build-api
 
