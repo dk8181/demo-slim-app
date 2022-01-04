@@ -29,6 +29,9 @@ return [
             . $config['host']
             . ':'
             . $config['port']
+            . '?'
+            . 'verify_peer='
+            . $config['verify_peer']
         ;
 
         $transport = Transport::fromDsn($dsn);
@@ -43,7 +46,8 @@ return [
             'host'     => getenv('MAILER_HOST'),
             'port'     => getenv('MAILER_PORT'),
             'encryption' => getenv('MAILER_ENCRYPTION'),
-            'from'       => [getenv('MAILER_FROM_EMAIL') => 'Info'],
+            'from'       => getenv('MAILER_FROM_EMAIL'),
+            'verify_peer' => 1,
         ],
     ],
 ];
