@@ -42,6 +42,12 @@ services:
             DB_USER: app
             DB_PASSWORD: secret
             DB_NAME: an_app
+            MAILER_HOST: mailer
+            MAILER_PORT: 1025
+            MAILER_USER: app
+            MAILER_PASSWORD: secret
+            MAILER_ENCRYPTION: tcp
+            MAILER_FROM_EMAIL: app-admin@info.org
         volumes:
             - ./api:/app
 
@@ -56,6 +62,12 @@ services:
             DB_USER: app
             DB_PASSWORD: secret
             DB_NAME: an_app
+            MAILER_HOST: mailer
+            MAILER_PORT: 1025
+            MAILER_USER: app
+            MAILER_PASSWORD: secret
+            MAILER_ENCRYPTION: tcp
+            MAILER_FROM_EMAIL: app-admin@info.org
         volumes:
             - ./api:/app
 
@@ -72,6 +84,6 @@ services:
 
     mailer:
         image: mailhog/mailhog
-        
+
 volumes:
     api-postgres:
