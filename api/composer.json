@@ -23,6 +23,7 @@
         "symfony/cache": "^6.0",
         "symfony/console": "^5.4",
         "symfony/mailer": "^6.0",
+        "twig/twig": "^3.3",
         "webmozart/assert": "1.10"
     },
     "require-dev": {
