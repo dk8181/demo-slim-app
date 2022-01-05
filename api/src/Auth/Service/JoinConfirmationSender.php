@@ -13,11 +13,16 @@ class JoinConfirmationSender
 {
     private MailerInterface $mailer;
     private string $from;
+    private string $frontendUrl;
 
-    public function __construct(MailerInterface $mailer, string $from)
-    {
+    public function __construct(
+        MailerInterface $mailer,
+        string $frontendUrl,
+        string $from
+    ) {
         $this->mailer = $mailer;
         $this->from = $from;
+        $this->frontendUrl = $frontendUrl;
     }
 
     public function send(Email $email, Token $token): void
@@ -31,7 +36,9 @@ class JoinConfirmationSender
             ->html(
                 '<h2>This is your validation link</h2>'
                 . '<p>'
-                . '<a href="/join/confirm?'
+                . '<a href="'
+                . $this->frontendUrl
+                . '/join/confirm?'
                 . \http_build_query([
                     'token' => $token->getValue(),
                 ])

@@ -23,7 +23,9 @@ class JoinConfirmationSenderTest extends TestCase
         $from = new Address('tester@app.test');
         $to = new Email('user@app.test');
         $token = new Token(Uuid::uuid4()->toString(), new \DateTimeImmutable());
-        $confirmUri = '/join/confirm?token=' . $token->getValue();
+
+        $frontendUrl = 'http://test';
+        $confirmUri = $frontendUrl . '/join/confirm?token=' . $token->getValue();
 
         $mailer = $this->createMock(Mailer::class);
 
@@ -41,8 +43,11 @@ class JoinConfirmationSenderTest extends TestCase
             })
         ;
 
-
-        $sender = new JoinConfirmationSender($mailer, $from->getAddress());
+        $sender = new JoinConfirmationSender(
+            $mailer,
+            $frontendUrl,
+            $from->getAddress()
+        );
 
         $sender->send($to, $token);
     }

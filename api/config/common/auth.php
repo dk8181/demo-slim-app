@@ -27,10 +27,20 @@ return [
 
         /**
          * @psalm-suppress MixedArrayAccess
+         * @psalm-var array{url:string} $frontendConfig
+         */
+        $frontendConfig = $container->get('config')['frontend'];
+
+        /**
+         * @psalm-suppress MixedArrayAccess
          * @psalm-var array{from:string} $mailerConfig
          */
         $mailerConfig = $container->get('config')['mailer'];
 
-        return new JoinConfirmationSender($mailer, $mailerConfig['from']);
+        return new JoinConfirmationSender(
+            $mailer,
+            $frontendConfig['url'],
+            $mailerConfig['from']
+        );
     },
 ];
