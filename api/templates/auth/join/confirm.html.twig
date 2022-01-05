@@ -1,0 +1,18 @@
+{% extends 'mail.html.twig' %}
+
+{% block body %}
+
+    <p style="margin: 0 0 10px 0;">Confirm your email:</p>
+    <p style="margin: 0;">
+        Click on this link -
+        <a
+            style="color: #1a8aee; text-decoration: none;"
+            href="{{ url }}"
+        >
+            <span style="text-decoration: underline">
+                {{ url }}
+            </span>
+        </a>
+    </p>
+
+{% endblock body %}

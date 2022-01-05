@@ -9,21 +9,25 @@ use App\Auth\Entity\User\Token;
 use App\Frontend\FrontendUrlGenerator;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email as MimeEmail;
+use Twig\Environment;
 
 class JoinConfirmationSender
 {
     public const JOIN_URI = '/join/confirm';
 
     private MailerInterface $mailer;
+    private Environment $twig;
     private FrontendUrlGenerator $frontend;
     private string $from;
 
     public function __construct(
         MailerInterface $mailer,
+        Environment $twig,
         FrontendUrlGenerator $frontend,
         string $from
     ) {
         $this->mailer = $mailer;
+        $this->twig = $twig;
         $this->frontend = $frontend;
         $this->from = $from;
     }
@@ -34,24 +38,20 @@ class JoinConfirmationSender
         $mimeEmail = (new MimeEmail())
             ->from($this->from)
             ->to($email->getValue())
-            ->subject('Your confirm token')
+            ->subject('Your confirmation of join')
             ->priority(MimeEmail::PRIORITY_HIGH)
             ->html(
-                '<h2>This is your validation link</h2>'
-                . '<p>'
-                . '<a href="'
-                . $this
-                    ->frontend
-                    ->generate(
-                        self::JOIN_URI,
-                        [
-                            'token' => $token->getValue(),
-                        ]
-                    )
-                . '">'
-                . 'Click for join'
-                . '</a>'
-                . '</p>'
+                $this->twig->render(
+                    'auth/join/confirm.html.twig',
+                    [
+                        'url' => $this->frontend->generate(
+                            self::JOIN_URI,
+                            [
+                                'token' => $token->getValue(),
+                            ]
+                        ),
+                    ]
+                )
             )
         ;
 

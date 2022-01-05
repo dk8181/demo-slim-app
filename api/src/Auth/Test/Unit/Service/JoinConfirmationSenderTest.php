@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mime\Email as MimeEmail;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Address;
+use Twig\Environment;
 
 /**
  * @covers JoinConfirmationSender
@@ -39,17 +40,30 @@ class JoinConfirmationSenderTest extends TestCase
             ->willReturn($confirmUrl)
         ;
 
+        $twig = $this->createMock(Environment::class);
+
+        /** \PHPUnit\Framework\MockObject\MockObject $twig */
+        $twig
+            ->expects($this->once())
+            ->method('render')
+            ->with(
+                $this->equalTo('auth/join/confirm.html.twig'),
+                $this->equalTo(['url' => $confirmUrl])
+            )
+            ->willReturn($body = '<a href="' . $confirmUrl . '">' . $confirmUrl . '</a>')
+        ;
+
         $mailer = $this->createMock(Mailer::class);
 
         /** \PHPUnit\Framework\MockObject\MockObject $mailer */
         $mailer
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(static function (MimeEmail $mimeEmail) use ($from, $to, $confirmUrl): int {
+            ->willReturnCallback(static function (MimeEmail $mimeEmail) use ($from, $to, $body): int {
                 self::assertEquals([$from], $mimeEmail->getFrom());
                 self::assertEquals([new Address($to->getValue())], $mimeEmail->getTo());
-                self::assertEquals('Your confirm token', $mimeEmail->getSubject());
-                self::assertStringContainsString($confirmUrl, $mimeEmail->getHtmlBody());
+                self::assertEquals('Your confirmation of join', $mimeEmail->getSubject());
+                self::assertEquals($body, $mimeEmail->getHtmlBody());
 
                 return 1;
             })
@@ -57,6 +71,7 @@ class JoinConfirmationSenderTest extends TestCase
 
         $sender = new JoinConfirmationSender(
             $mailer,
+            $twig,
             $frontend,
             $from->getAddress()
         );
