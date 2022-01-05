@@ -1,10 +1,11 @@
 <?php
 
-use Psr\Container\ContainerInterface;
 use Twig\Environment;
-use Twig\Extension\DebugExtension;
-use Twig\Extension\ExtensionInterface;
 use Twig\Loader\FilesystemLoader;
+use Twig\Extension\DebugExtension;
+use Psr\Container\ContainerInterface;
+use Twig\Extension\ExtensionInterface;
+use App\Frontend\FrontendUrlTwigExtension;
 
 return [
     Environment::class => static function (ContainerInterface $container): Environment {
@@ -55,7 +56,9 @@ return [
                 FilesystemLoader::MAIN_NAMESPACE => __DIR__ . '/../../templates',
             ],
             'cache_dir' => __DIR__ . '/../../var/cache/twig',
-            'extensions' => [],
+            'extensions' => [
+                FrontendUrlTwigExtension::class,
+            ],
         ],
     ],
 ];
