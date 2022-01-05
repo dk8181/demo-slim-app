@@ -28,18 +28,6 @@ class JoinConfirmationSenderTest extends TestCase
 
         $confirmUrl = 'http://test.org/' . JoinConfirmationSender::JOIN_URI . '?token=' . $token->getValue();
 
-        $frontend = $this->createMock(FrontendUrlGenerator::class);
-
-        $frontend
-            ->expects($this->once())
-            ->method('generate')
-            ->with(
-                $this->equalTo(JoinConfirmationSender::JOIN_URI),
-                $this->equalTo(['token' => $token->getValue()])
-            )
-            ->willReturn($confirmUrl)
-        ;
-
         $twig = $this->createMock(Environment::class);
 
         /** \PHPUnit\Framework\MockObject\MockObject $twig */
@@ -48,7 +36,10 @@ class JoinConfirmationSenderTest extends TestCase
             ->method('render')
             ->with(
                 $this->equalTo('auth/join/confirm.html.twig'),
-                $this->equalTo(['url' => $confirmUrl])
+                $this->equalTo([
+                    'uri' => JoinConfirmationSender::JOIN_URI,
+                    'token' => $token
+                ])
             )
             ->willReturn($body = '<a href="' . $confirmUrl . '">' . $confirmUrl . '</a>')
         ;
@@ -72,7 +63,6 @@ class JoinConfirmationSenderTest extends TestCase
         $sender = new JoinConfirmationSender(
             $mailer,
             $twig,
-            $frontend,
             $from->getAddress()
         );
 

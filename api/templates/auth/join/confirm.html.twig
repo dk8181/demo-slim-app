@@ -3,6 +3,9 @@
 {% block body %}
 
     <p style="margin: 0 0 10px 0;">Confirm your email:</p>
+
+    {% set url = frontend_url({{ uri }}, {'token': token.value}) %}
+
     <p style="margin: 0;">
         Click on this link -
         <a

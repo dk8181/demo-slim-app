@@ -5,11 +5,11 @@ declare(strict_types=1);
 use App\Auth\Entity\User\User;
 use Doctrine\ORM\EntityRepository;
 use Psr\Container\ContainerInterface;
-use App\Frontend\FrontendUrlGenerator;
 use App\Auth\Entity\User\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Auth\Service\JoinConfirmationSender;
 use Symfony\Component\Mailer\MailerInterface;
+use Twig\Environment;
 
 return [
     UserRepository::class => static function (ContainerInterface $container): UserRepository {
@@ -26,8 +26,8 @@ return [
         /** @var MailerInterface $mailer */
         $mailer = $container->get(MailerInterface::class);
 
-        /** @var FrontendUrlGenerator $frontendUrlGenerator */
-        $frontendUrlGenerator = $container->get(FrontendUrlGenerator::class);
+        /** @var Environment $twig */
+        $twig = $container->get(Environment::class);
 
         /**
          * @psalm-suppress MixedArrayAccess
@@ -37,7 +37,7 @@ return [
 
         return new JoinConfirmationSender(
             $mailer,
-            $frontendUrlGenerator,
+            $twig,
             $mailerConfig['from']
         );
     },

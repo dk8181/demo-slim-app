@@ -6,7 +6,6 @@ namespace App\Auth\Service;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Token;
-use App\Frontend\FrontendUrlGenerator;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email as MimeEmail;
 use Twig\Environment;
@@ -17,18 +16,15 @@ class JoinConfirmationSender
 
     private MailerInterface $mailer;
     private Environment $twig;
-    private FrontendUrlGenerator $frontend;
     private string $from;
 
     public function __construct(
         MailerInterface $mailer,
         Environment $twig,
-        FrontendUrlGenerator $frontend,
         string $from
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
-        $this->frontend = $frontend;
         $this->from = $from;
     }
 
@@ -44,12 +40,8 @@ class JoinConfirmationSender
                 $this->twig->render(
                     'auth/join/confirm.html.twig',
                     [
-                        'url' => $this->frontend->generate(
-                            self::JOIN_URI,
-                            [
-                                'token' => $token->getValue(),
-                            ]
-                        ),
+                        'uri' => self::JOIN_URI,
+                        'token' => $token,
                     ]
                 )
             )
