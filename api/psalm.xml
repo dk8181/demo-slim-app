@@ -25,6 +25,7 @@
             <errorLevel type="suppress">
                 <directory name="src/Auth/Test" />
                 <directory name="src/Http/Test" />
+                <directory name="src/Frontend/Test" />
                 <directory name="tests" />
             </errorLevel>
         </PropertyNotSetInConstructor>
