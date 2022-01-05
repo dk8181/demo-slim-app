@@ -8,6 +8,7 @@ use Ramsey\Uuid\Uuid;
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Token;
 use App\Auth\Service\JoinConfirmationSender;
+use App\Frontend\FrontendUrlGenerator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mime\Email as MimeEmail;
 use Symfony\Component\Mailer\Mailer;
@@ -24,8 +25,19 @@ class JoinConfirmationSenderTest extends TestCase
         $to = new Email('user@app.test');
         $token = new Token(Uuid::uuid4()->toString(), new \DateTimeImmutable());
 
-        $frontendUrl = 'http://test';
-        $confirmUri = $frontendUrl . '/join/confirm?token=' . $token->getValue();
+        $confirmUrl = 'http://test.org/' . JoinConfirmationSender::JOIN_URI . '?token=' . $token->getValue();
+
+        $frontend = $this->createMock(FrontendUrlGenerator::class);
+
+        $frontend
+            ->expects($this->once())
+            ->method('generate')
+            ->with(
+                $this->equalTo(JoinConfirmationSender::JOIN_URI),
+                $this->equalTo(['token' => $token->getValue()])
+            )
+            ->willReturn($confirmUrl)
+        ;
 
         $mailer = $this->createMock(Mailer::class);
 
@@ -33,11 +45,11 @@ class JoinConfirmationSenderTest extends TestCase
         $mailer
             ->expects($this->once())
             ->method('send')
-            ->willReturnCallback(static function (MimeEmail $mimeEmail) use ($from, $to, $confirmUri): int {
+            ->willReturnCallback(static function (MimeEmail $mimeEmail) use ($from, $to, $confirmUrl): int {
                 self::assertEquals([$from], $mimeEmail->getFrom());
                 self::assertEquals([new Address($to->getValue())], $mimeEmail->getTo());
                 self::assertEquals('Your confirm token', $mimeEmail->getSubject());
-                self::assertStringContainsString($confirmUri, $mimeEmail->getHtmlBody());
+                self::assertStringContainsString($confirmUrl, $mimeEmail->getHtmlBody());
 
                 return 1;
             })
@@ -45,7 +57,7 @@ class JoinConfirmationSenderTest extends TestCase
 
         $sender = new JoinConfirmationSender(
             $mailer,
-            $frontendUrl,
+            $frontend,
             $from->getAddress()
         );
 

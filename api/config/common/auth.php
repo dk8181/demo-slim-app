@@ -5,9 +5,10 @@ declare(strict_types=1);
 use App\Auth\Entity\User\User;
 use Doctrine\ORM\EntityRepository;
 use Psr\Container\ContainerInterface;
+use App\Frontend\FrontendUrlGenerator;
 use App\Auth\Entity\User\UserRepository;
-use App\Auth\Service\JoinConfirmationSender;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Auth\Service\JoinConfirmationSender;
 use Symfony\Component\Mailer\MailerInterface;
 
 return [
@@ -25,11 +26,8 @@ return [
         /** @var MailerInterface $mailer */
         $mailer = $container->get(MailerInterface::class);
 
-        /**
-         * @psalm-suppress MixedArrayAccess
-         * @psalm-var array{url:string} $frontendConfig
-         */
-        $frontendConfig = $container->get('config')['frontend'];
+        /** @var FrontendUrlGenerator $frontendUrlGenerator */
+        $frontendUrlGenerator = $container->get(FrontendUrlGenerator::class);
 
         /**
          * @psalm-suppress MixedArrayAccess
@@ -39,7 +37,7 @@ return [
 
         return new JoinConfirmationSender(
             $mailer,
-            $frontendConfig['url'],
+            $frontendUrlGenerator,
             $mailerConfig['from']
         );
     },

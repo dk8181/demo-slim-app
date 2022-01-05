@@ -6,23 +6,26 @@ namespace App\Auth\Service;
 
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Token;
+use App\Frontend\FrontendUrlGenerator;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email as MimeEmail;
 
 class JoinConfirmationSender
 {
+    public const JOIN_URI = '/join/confirm';
+
     private MailerInterface $mailer;
+    private FrontendUrlGenerator $frontend;
     private string $from;
-    private string $frontendUrl;
 
     public function __construct(
         MailerInterface $mailer,
-        string $frontendUrl,
+        FrontendUrlGenerator $frontend,
         string $from
     ) {
         $this->mailer = $mailer;
+        $this->frontend = $frontend;
         $this->from = $from;
-        $this->frontendUrl = $frontendUrl;
     }
 
     public function send(Email $email, Token $token): void
@@ -37,11 +40,14 @@ class JoinConfirmationSender
                 '<h2>This is your validation link</h2>'
                 . '<p>'
                 . '<a href="'
-                . $this->frontendUrl
-                . '/join/confirm?'
-                . \http_build_query([
-                    'token' => $token->getValue(),
-                ])
+                . $this
+                    ->frontend
+                    ->generate(
+                        self::JOIN_URI,
+                        [
+                            'token' => $token->getValue(),
+                        ]
+                    )
                 . '">'
                 . 'Click for join'
                 . '</a>'
