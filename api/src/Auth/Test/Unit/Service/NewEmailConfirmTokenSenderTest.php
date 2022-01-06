@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace App\Auth\Test\Unit\Service;
 
 use Ramsey\Uuid\Uuid;
+use Twig\Environment;
 use App\Auth\Entity\User\Email;
 use App\Auth\Entity\User\Token;
-use App\Auth\Service\JoinConfirmationSender;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Mime\Email as MimeEmail;
-use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Address;
-use Twig\Environment;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email as MimeEmail;
+use App\Auth\Service\NewEmailConfirmTokenSender;
 
 /**
- * @covers JoinConfirmationSender
+ * @covers NewEmailConfirmTokenSender
  */
-class JoinConfirmationSenderTest extends TestCase
+class NewEmailConfirmTokenSenderTest extends TestCase
 {
     public function testSuccess(): void
     {
@@ -25,7 +25,7 @@ class JoinConfirmationSenderTest extends TestCase
         $to = new Email('user@app.test');
         $token = new Token(Uuid::uuid4()->toString(), new \DateTimeImmutable());
 
-        $confirmUrl = 'http://test.org/' . JoinConfirmationSender::URI . '?token=' . $token->getValue();
+        $confirmUrl = 'http://test.org/' . NewEmailConfirmTokenSender::URI . '?token=' . $token->getValue();
 
         $twig = $this->createMock(Environment::class);
 
@@ -34,9 +34,9 @@ class JoinConfirmationSenderTest extends TestCase
             ->expects($this->once())
             ->method('render')
             ->with(
-                $this->equalTo(JoinConfirmationSender::TEMPLATE_PATH),
+                $this->equalTo(NewEmailConfirmTokenSender::TEMPLATE_PATH),
                 $this->equalTo([
-                    'uri' => JoinConfirmationSender::URI,
+                    'uri' => NewEmailConfirmTokenSender::URI,
                     'token' => $token
                 ])
             )
@@ -52,14 +52,14 @@ class JoinConfirmationSenderTest extends TestCase
             ->willReturnCallback(static function (MimeEmail $mimeEmail) use ($from, $to, $body): int {
                 self::assertEquals([new Address($from)], $mimeEmail->getFrom());
                 self::assertEquals([new Address($to->getValue())], $mimeEmail->getTo());
-                self::assertEquals(JoinConfirmationSender::SUBJECT, $mimeEmail->getSubject());
+                self::assertEquals(NewEmailConfirmTokenSender::SUBJECT, $mimeEmail->getSubject());
                 self::assertEquals($body, $mimeEmail->getHtmlBody());
 
                 return 1;
             })
         ;
 
-        $sender = new JoinConfirmationSender(
+        $sender = new NewEmailConfirmTokenSender(
             $mailer,
             $twig,
             $from
