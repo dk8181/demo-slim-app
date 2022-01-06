@@ -5,7 +5,7 @@
          convertDeprecationsToExceptions="true"
          colors="true"
          verbose="true"
-         cacheResultFile="var/phpunit/.phpunit.result.cache"
+         cacheResultFile="var/cache/.phpunit.result.cache"
 >
     <testsuites>
         <testsuite name="unit">
@@ -18,7 +18,7 @@
         </testsuite>
     </testsuites>
 
-    <coverage cacheDirectory="/var/phpunit/coverage"
+    <coverage cacheDirectory="/var/cache/coverage"
         ignoreDeprecatedCodeUnits="true"
         includeUncoveredFiles="true"
         processUncoveredFiles="true"
