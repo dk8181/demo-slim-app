@@ -43,13 +43,13 @@ return [
             $logger
         );
 
-        if ($config['use_entry']) {
+        if ($config['use_sentry']) {
             $middleware->setDefaultErrorHandler(
                 new SentryErrorHandlerDecorator($loggedErrorHandler)
             );
         }
 
-        if (! $config['use_entry']) {
+        if (! $config['use_sentry']) {
             $middleware->setDefaultErrorHandler($loggedErrorHandler);
         }
 
