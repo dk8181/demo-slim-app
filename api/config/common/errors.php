@@ -8,6 +8,7 @@ use Psr\Container\ContainerInterface;
 use App\ErrorHandler\LoggedErrorHandler;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Interfaces\CallableResolverInterface;
+use App\ErrorHandler\SentryErrorHandlerDecorator;
 
 return [
     ErrorMiddleware::class => static function(ContainerInterface $container): ErrorMiddleware {
@@ -36,20 +37,29 @@ return [
         /** @var LoggerInterface logger */
         $logger = $container->get(LoggerInterface::class);
 
-        $middleware->setDefaultErrorHandler(
-            new LoggedErrorHandler(
-                $callableResolver,
-                $responseFactory,
-                $logger
-            )
+        $loggedErrorHandler = new LoggedErrorHandler(
+            $callableResolver,
+            $responseFactory,
+            $logger
         );
+
+        if ($config['use_entry']) {
+            $middleware->setDefaultErrorHandler(
+                new SentryErrorHandlerDecorator($loggedErrorHandler)
+            );
+        }
+
+        if (! $config['use_entry']) {
+            $middleware->setDefaultErrorHandler($loggedErrorHandler);
+        }
 
         return $middleware;
     },
 
     'config' => [
         'errors' => [
-            'display_error_details' => (bool) getenv('APP_DEBUG'),
+            'display_error_details' => (bool) \getenv('APP_DEBUG'),
+            'use_sentry' => (bool) \getenv('SENTRY_DSN'),
         ],
     ],
 ];
